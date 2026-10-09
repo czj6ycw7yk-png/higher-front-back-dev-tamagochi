@@ -5,7 +5,7 @@ class GameError(Exception):
     """Базовое исключение для игры."""
 
 
-class NotEnoughMoneyError(GameError):
+class NotEnoughMoney(GameError):
     """Недостаточно монет для покупки."""
 
 
@@ -21,5 +21,5 @@ class EmptyMedicineError(GameError):
     """Лекарство закончилось."""
 
 
-class TamagochiDeadError(GameError):
+class TamagochiIsGone(GameError):
     """Питомец мёртв."""
