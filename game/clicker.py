@@ -14,6 +14,7 @@ class AbstractClicker(ABC):
     def click(self) -> None:
         """Основная логика кликера — один клик."""
 
+    @property
     @abstractmethod
     def income_per_click(self) -> int:
         """Возвращает доход за последний клик.
@@ -39,6 +40,7 @@ class SimpleRandomClicker(AbstractClicker):
         """Совершает клик, генерируя случайный доход."""
         self._last_income = random.randint(self._min_income, self._max_income)
 
+    @property
     def income_per_click(self) -> int:
         """Возвращает доход за последний клик.
 
