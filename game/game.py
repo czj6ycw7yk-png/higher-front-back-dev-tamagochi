@@ -6,8 +6,8 @@ from game.exceptions import (
     EmptyMedicineError,
     NoFoodError,
     NoMedicineError,
-    NotEnoughMoneyError,
-    TamagochiDeadError,
+    NotEnoughMoney,
+    TamagochiIsGone,
 )
 from game.models import Food, Medicine
 from game.tamagochi import AbstractTamagochi
@@ -116,19 +116,19 @@ class SimpleGame(AbstractGame):
         """Пойти на работу.
 
         :return: Заработанные монеты.
-        :raises TamagochiDeadError: Если питомец мёртв.
+        :raises TamagochiIsGone: Если питомец мёртв.
         """
         if not self.tamagochi.is_alive():
-            raise TamagochiDeadError("Питомец мёртв, работа невозможна")
+            raise TamagochiIsGone("Питомец мёртв, работа невозможна")
         self.clicker.click()
-        income = self.clicker.income_per_click()
+        income = self.clicker.income_per_click  # <-- Убрали скобки
         self._coins += income
         return income
 
     def buy_food(self) -> None:
         """Купить еду.
 
-        :raises NotEnoughMoneyError: Если не хватает монет.
+        :raises NotEnoughMoney: Если не хватает монет.
         """
         if not self.all_food:
             print("Нет доступной еды для покупки.")
@@ -149,7 +149,7 @@ class SimpleGame(AbstractGame):
             return
         food = self.all_food[choice]
         if self._coins < food.price:
-            raise NotEnoughMoneyError("Недостаточно монет для покупки еды.")
+            raise NotEnoughMoney("Недостаточно монет для покупки еды.")
         self._coins -= food.price
         self._food_bag.append(food)
         print(f"Вы купили {food.name}.")
@@ -157,7 +157,7 @@ class SimpleGame(AbstractGame):
     def buy_medicine(self) -> None:
         """Купить лекарство.
 
-        :raises NotEnoughMoneyError: Если не хватает монет.
+        :raises NotEnoughMoney: Если не хватает монет.
         """
         if not self.all_medicine:
             print("Нет доступных лекарств для покупки.")
@@ -178,7 +178,7 @@ class SimpleGame(AbstractGame):
             return
         med = self.all_medicine[choice]
         if self._coins < med.price:
-            raise NotEnoughMoneyError(
+            raise NotEnoughMoney(
                 "Недостаточно монет для покупки лекарства."
             )
         self._coins -= med.price
